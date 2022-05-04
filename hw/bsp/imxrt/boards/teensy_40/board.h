@@ -32,6 +32,17 @@
 // required since iMX RT10xx SDK include this file for board size
 #define BOARD_FLASH_SIZE (2 * 1024 * 1024)
 
+
+// Somehow this pin gets messed up during initialization, on some projects on teensy
+// and it's required to not be messed up in order to allow the teensy to boot.  Not sure
+// of exactly what's going on honestly, but, without this fix,
+//     examples/device/cdc_msc_freertos
+//     examples/device/dynamic_configuration
+//     examples/device/hid_composite_freertos
+//     examples/device/usbtmc
+// don't work.  Not sure why it's only those examples that are broken.
+#define TEENSY_SPECIAL_PINMUX
+
 // LED
 #define LED_PINMUX            IOMUXC_GPIO_B0_03_GPIO2_IO03 // D13
 #define LED_PORT              GPIO2

@@ -54,6 +54,11 @@ void board_init(void)
 //  NVIC_SetPriority(USB0_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY );
 #endif
 
+#ifdef TEENSY_SPECIAL_PINMUX
+  // See teensy_40/board.h for description
+  IOMUXC_SetPinMux( IOMUXC_GPIO_AD_B0_09_GPIO1_IO09, 0U);
+#endif
+
   // LED
   IOMUXC_SetPinMux( LED_PINMUX, 0U);
   IOMUXC_SetPinConfig( LED_PINMUX, 0x10B0U);
