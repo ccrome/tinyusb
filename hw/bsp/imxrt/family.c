@@ -37,6 +37,16 @@
 // needed by fsl_flexspi_nor_boot
 const uint8_t dcd_data[] = { 0x00 };
 
+#if CFG_TUSB_OS == OPT_OS_FREERTOS
+void freertos_set_irq_priority(void) {
+    // If freeRTOS is used, IRQ priority is limit by max syscall ( smaller is higher )
+    NVIC_SetPriority(USB_OTG1_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY );
+#ifdef USB_OTG2_IRQn
+    NVIC_SetPriority(USB_OTG2_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY );
+#endif
+}
+#endif
+
 void board_init(void)
 {
   // Init clock
@@ -50,8 +60,7 @@ void board_init(void)
   // 1ms tick timer
   SysTick_Config(SystemCoreClock / 1000);
 #elif CFG_TUSB_OS == OPT_OS_FREERTOS
-  // If freeRTOS is used, IRQ priority is limit by max syscall ( smaller is higher )
-//  NVIC_SetPriority(USB0_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY );
+  freertos_set_irq_priority();
 #endif
 
   // LED
